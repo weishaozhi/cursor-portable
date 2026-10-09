@@ -50,6 +50,25 @@ command -v node >/dev/null 2>&1 && ok "node $(node --version 2>/dev/null || echo
 command -v npm  >/dev/null 2>&1 && ok "npm  $(npm  --version 2>/dev/null || echo ?)" || warn "npm not on PATH"
 command -v git  >/dev/null 2>&1 && ok "git  $(git  --version 2>/dev/null | awk '{print $3}')" || warn "git not on PATH"
 
+# Configure this clone to honor .gitattributes without autocrlf override.
+# Why: autocrlf=true (default on some setups) silently converts CRLF<->LF on
+# every checkout, fighting .gitattributes and producing "every line changed"
+# diffs. Setting it to false here means .gitattributes is the single source
+# of truth. Idempotent: only writes if it isn't already false.
+if command -v git >/dev/null 2>&1 && [[ -d "${REPO_ROOT}/.git" ]]; then
+    current_autocrlf="$(git -C "$REPO_ROOT" config --local --get core.autocrlf 2>/dev/null || true)"
+    if [[ "$current_autocrlf" != "false" ]]; then
+        if [[ $DRY_RUN -eq 1 ]]; then
+            dry "would set core.autocrlf=false in ${REPO_ROOT}/.git/config"
+        else
+            git -C "$REPO_ROOT" config --local core.autocrlf false
+            ok "core.autocrlf=false in this clone (.gitattributes now authoritative)"
+        fi
+    else
+        ok "core.autocrlf already false (good)"
+    fi
+fi
+
 for f in bin/mcp-bridge/mcp-bridge.js bin/mcp-bridge/package.json user/mcp.json; do
     [[ -e "${REPO_ROOT}/$f" ]] || { echo "repo layout broken: missing $f" >&2; exit 1; }
 done

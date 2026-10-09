@@ -48,6 +48,28 @@ if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
     Warn "git not on PATH — sync workflow won't work, but setup can still install."
 }
 
+# Configure this clone to honor .gitattributes without autocrlf override.
+# Why: core.autocrlf=true (Windows default) silently converts CRLF<->LF on
+# every checkout, fighting .gitattributes and producing "every line changed"
+# diffs. Setting it to false here means .gitattributes is the single source
+# of truth. Idempotent: only writes if it isn't already false.
+if (Get-Command git -ErrorAction SilentlyContinue) {
+    $repoGitConfig = Join-Path $RepoRoot ".git\config"
+    if (Test-Path $repoGitConfig) {
+        $currentAutocrlf = (git -C $RepoRoot config --local --get core.autocrlf 2>$null)
+        if ($currentAutocrlf -ne "false") {
+            if ($DryRun) {
+                Dry "would set core.autocrlf=false in $RepoRoot/.git/config"
+            } else {
+                git -C $RepoRoot config --local core.autocrlf false | Out-Null
+                Ok "core.autocrlf=false in this clone (.gitattributes now authoritative)"
+            }
+        } else {
+            Ok "core.autocrlf already false (good)"
+        }
+    }
+}
+
 # Node + npm: required only for the MCP bridge.
 if (-not (Test-Path (Join-Path $RepoRoot "bin\mcp-bridge\package.json"))) {
     Write-Output "  [skip] no bin/mcp-bridge/package.json — skipping node/npm check"
