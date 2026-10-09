@@ -9,3 +9,6 @@ Thumbs.db
 # Never commit the self-bootstrap artifacts
 .cursor/
 
+# Machine-specific state (crash-reporter-id UUID, window layout, etc.)
+user/argv.json
+
