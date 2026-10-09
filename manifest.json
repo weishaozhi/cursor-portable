@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": 1,
+  "description": "Declares what cursor-portable syncs and where. The setup scripts enforce these contracts; the file is also the source of truth for the README's sync table.",
+  "sync_targets": [
+    {
+      "name": "MCP bridge",
+      "from": "bin/mcp-bridge/",
+      "to": "~/.cursor/bin/mcp-bridge/",
+      "platform": "all",
+      "post_install": "npm install --omit=dev",
+      "notes": "Uses ${userHome} in mcp.json so paths are resolved at MCP-spawn time. node_modules is gitignored."
+    },
+    {
+      "name": "MCP config",
+      "from": "user/mcp.json",
+      "to": "~/.cursor/mcp.json",
+      "platform": "all",
+      "notes": "Portable: ${userHome} resolves on every OS."
+    },
+    {
+      "name": "User skills",
+      "from": "skills/",
+      "to": "~/.cursor/skills/",
+      "platform": "all",
+      "merge_strategy": "overlay",
+      "notes": "Setup copies on top of existing skills; user-added skills are preserved."
+    },
+    {
+      "name": "Project skills",
+      "from": "skills/",
+      "to": "<ProjectDir>/.cursor/skills/",
+      "platform": "all",
+      "merge_strategy": "overlay"
+    },
+    {
+      "name": "Project rules",
+      "from": "rules/",
+      "to": "<ProjectDir>/.cursor/rules/",
+      "platform": "all",
+      "merge_strategy": "overlay"
+    }
+  ],
+  "explicitly_excluded": [
+    {
+      "name": "~/.cursor/argv.json",
+      "reason": "Contains machine-specific crash-reporter-id UUID. Writing the same ID to every machine makes crash reports correlatable and links separate installs. Let Cursor regenerate on first launch."
+    },
+    {
+      "name": "%APPDATA%/Cursor/User/settings.json",
+      "reason": "May contain http.proxy, machine-specific paths, account IDs. Sync selectively by editing the file and adding a partial-sync step to setup.ps1."
+    },
+    {
+      "name": "Extensions binary",
+      "reason": "Cursor/VS Code extensions are OS-specific binaries. Use extensions.txt as a checklist and let Cursor Settings Sync handle them, or `cursor --install-extension <id>` manually."
+    },
+    {
+      "name": "Workspace storage + conversation history",
+      "reason": "Path-keyed; recreated on first open of the same workspace."
+    }
+  ]
+}

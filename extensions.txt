@@ -1,0 +1,23 @@
+# Cursor extensions to install on a new machine.
+#
+# This is a checklist, not an installer. Cursor/VS Code has no portable
+# extension installer that handles marketplace auth, so the recommended flow is:
+#
+#   1. Install Cursor and sign in.
+#   2. Cursor Settings → Sync → enable "Extensions" so Cursor pulls the
+#      extensions you used on the other machine via its cloud sync.
+#   3. As a fallback (or for a brand-new profile), install manually:
+#        cursor --install-extension <id>
+#      e.g. `cursor --install-extension ms-python.python`
+#
+# To export your current extensions list, run:
+#   cursor --list-extensions | Out-File extensions.txt -Encoding utf8
+#   (then commit the updated file)
+
+anysphere.cursorpyright
+anysphere.remote-ssh
+hediet.debug-visualizer
+local-smart.excel-live-server
+meteorstudio.cursorcode
+ms-python.python
+ms-python.vscode-pylance

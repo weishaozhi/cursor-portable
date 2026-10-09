@@ -1,0 +1,19 @@
+# Normalize line endings per file type so CRLF/LF doesn't churn across clones.
+# Skills are markdown; setup scripts are platform-specific.
+
+# Defaults: LF everywhere (Unix-friendly)
+* text=auto eol=lf
+
+# Windows-native scripts: keep CRLF on checkout
+*.ps1      text eol=crlf
+*.cmd      text eol=crlf
+*.bat      text eol=crlf
+
+# Shell scripts: LF
+*.sh       text eol=lf
+
+# Binary: lock as binary (no conversions)
+*.png binary
+*.jpg binary
+*.ico binary
+*.lock   -diff

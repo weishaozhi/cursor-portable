@@ -1,0 +1,11 @@
+# node_modules lives next to the bridge source so npm install works on bootstrap.
+# Keeping it tracked inflates the repo by ~10 MB and is non-portable (OS-specific).
+bin/mcp-bridge/node_modules/
+
+# Don't track native machine-specific files even if they slip in.
+*.log
+.DS_Store
+Thumbs.db
+# Never commit the self-bootstrap artifacts
+.cursor/
+

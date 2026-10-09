@@ -1,0 +1,27 @@
+{
+  "name": "browser-mcp-bridge",
+  "version": "1.0.0",
+  "description": "MCP bridge that connects Cursor (stdio MCP) to Chrome extensions via WebSocket (ws://localhost:23456).",
+  "main": "mcp-bridge.js",
+  "bin": {
+    "browser-mcp-bridge": "mcp-bridge.js"
+  },
+  "scripts": {
+    "start": "node mcp-bridge.js",
+    "start:ws": "node mcp-bridge.js ws://localhost:23456"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "browser",
+    "websocket",
+    "chrome-extension"
+  ],
+  "author": "",
+  "license": "MIT",
+  "type": "commonjs",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "ws": "^8.21.3"
+  }
+}
