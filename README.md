@@ -1,5 +1,7 @@
 # Cursor Portable
 
+> 🌐 Language: **English** | [中文](https://github.com/weishaozhi/cursor-portable/blob/main/.github/README.md)
+
 A single-repo bootstrap that recreates your Cursor skills, rules, and MCP servers on any machine.
 
 ## What's inside
